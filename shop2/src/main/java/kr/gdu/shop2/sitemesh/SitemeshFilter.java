@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebFilter;
 import org.sitemesh.builder.SiteMeshFilterBuilder;
 import org.sitemesh.config.ConfigurableSiteMeshFilter;
 
-@WebFilter("/*")
+// @WebFilter("/*")
 public class SitemeshFilter extends ConfigurableSiteMeshFilter{
 
 	@Override

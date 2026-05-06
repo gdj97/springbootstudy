@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+	<!-- /src/main/resources/logback.xml -->
+	<property name="LOG_PATH" value="C:/temp/logs" />  <!-- 로그파일의 폴더  -->
+    <property name="LOG_FILE_NAME" value="shop1_log" /> <!-- 로그파일명  -->
+
+	<!-- 로그파일 출력 위치 : 콘솔출력-->    
+	<appender name="STDOUT"	class="ch.qos.logback.core.ConsoleAppender">
+		<!-- 로그출력 형식 설정 -->
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -
+				%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 로그파일 출력 위치 : 파일 출력-->    
+	<appender name="FILE"	class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+
+		<!-- 파일명 변경 규칙  -->
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<!-- 로그출력 형식 설정 -->
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} -
+				%msg%n</pattern>
+		</encoder>
+	</appender>
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+    <!--  dao.mapper 패키지의 내용을 로깅 하도록 설정 -->
+	<logger name="dao.mapper" level="DEBUG" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</logger>
+
+</configuration>

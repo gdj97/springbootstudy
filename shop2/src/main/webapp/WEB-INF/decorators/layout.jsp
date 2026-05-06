@@ -185,12 +185,12 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></scrip
 <script>
 
 $(function(){  //화면 준비되면
-//	goodeelogo();
-//	getSido(); //호이스팅기능: 선언보다 먼저 호출되는 것이 가능
+	goodeelogo();
+	getSido(); //호이스팅기능: 선언보다 먼저 호출되는 것이 가능
 //	exchangeString();
 //	exchangeJson();
-//	piegraph(2);   //글쓴이별 게시글등록 건수를 파이그래프로 출력
-//    barlinegraph(2) //최근 7일간 게시글 등록 건수를 막대선그래프 출력
+	piegraph(2);   //글쓴이별 게시글등록 건수를 파이그래프로 출력
+    barlinegraph(2) //최근 7일간 게시글 등록 건수를 막대선그래프 출력
 	
 })
 function getSido() { 

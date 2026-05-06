@@ -15,7 +15,7 @@ import kr.gdu.shop2.intercepter.BoardIntercepter;
 
 @Configuration
 @EnableAspectJAutoProxy //AOP 관련 설정 
-@EnableWebMvc  //기본 제공되는 web처리 기능 유지
+//@EnableWebMvc  //기본 제공되는 web처리 기능 유지
 public class MvcConfig implements WebMvcConfigurer{
 	
 	//예외처리 객체 : 예외발생시 예외 처리해 주는 객체

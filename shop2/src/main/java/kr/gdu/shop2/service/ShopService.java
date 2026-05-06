@@ -23,6 +23,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,14 +32,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class ShopService {
+	@Value("${resources.dir}")   //application.properties 파일의 정보 가져오기
+	private String RESOURCES_DIR;  //resources.dir=D:/20251222/springboot/workspace/shop2/src/main/resources/
 	
-
-	public String sidoSelect1(String si, String gu, HttpServletRequest request) {
+	public String sidoSelect1(String si, String gu) {
 		BufferedReader fr = null;
-		//path : sido.txt 파일의 절대경로. 
-		//request.getServletContext().getRealPath("/") => /webapp/ 폴더내를 의미. 
-		//D:\20251222\spring\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\shop1
-		String path = request.getServletContext().getRealPath("/")+"file/sido.txt";
+		String path = RESOURCES_DIR+"static/file/sido.txt";
 		try {
 			fr = new BufferedReader(new FileReader(path));
 		}catch(Exception e) {
@@ -59,9 +58,9 @@ public class ShopService {
 		return list.toString(); //[서울특별시,경기도,경상북도,....] 		
 	}
 
-	public List<String> sidoSelect(String si, String gu, HttpServletRequest request) {
+	public List<String> sidoSelect(String si, String gu) {
 		BufferedReader fr = null;
-		String path = request.getServletContext().getRealPath("/")+"file/sido.txt";
+		String path = RESOURCES_DIR +"static/file/sido.txt";
 		try {
 			fr = new BufferedReader(new FileReader(path));
 		}catch(Exception e) {
