@@ -66,9 +66,8 @@ public class AjaxController {
 		return service.exchangeJson();
 	}	
 	@PostMapping(value="uploadImage",produces="text/plain; charset=utf-8")
-	  public String summernoteImageUpload 
-	    (@RequestParam("image") MultipartFile multipartFile,HttpServletRequest request) {
-		return service.summernoteImageUpload(multipartFile,request);
+	  public String summernoteImageUpload (@RequestParam("image") MultipartFile multipartFile) {
+		return service.summernoteImageUpload(multipartFile);
 	  }
 	@RequestMapping("goodeelogo")
 	public String goodeelogo() {
@@ -97,12 +96,12 @@ public class AjaxController {
 	@PostMapping(value="gptquestion", produces="text/html; charset=utf-8")
 	public String gptquestion (String question) {
       String gptResponse = null;
-	  try {
+//	  try {
 		  //gptResponse : gpt의 응답 메세지
 		  gptResponse = service.getChatGPTResponse(question);
-	  } catch (URISyntaxException | IOException | InterruptedException e) {
-		e.printStackTrace();
-	  }
+//	  } catch (URISyntaxException | IOException | InterruptedException e) {
+//		e.printStackTrace();
+//	  }
 	  return gptResponse;
 	}	
 }

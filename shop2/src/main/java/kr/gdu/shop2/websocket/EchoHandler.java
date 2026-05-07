@@ -35,8 +35,8 @@ public class EchoHandler extends  TextWebSocketHandler implements InitializingBe
 		clients.add(session);
 		//WebSocketConfig 클래스에서 .addInterceptors(new HttpSessionHandshakeInterceptor()) 설정이 필요함
 		Map<String, Object> map = session.getAttributes();
-		User loginUser = (User)map.get("loginUser"); //HttpSession에 설정된 로그인정보 조회
-		System.out.println(loginUser.getUserid());   //로그인된 아이디정보 화면에 출력함
+//		User loginUser = (User)map.get("loginUser"); //HttpSession에 설정된 로그인정보 조회
+//		System.out.println(loginUser.getUserid());   //로그인된 아이디정보 화면에 출력함
 	}
 
 	//브라우저에서 메시지를 전송한 경우. 메세지 서버가 수신함

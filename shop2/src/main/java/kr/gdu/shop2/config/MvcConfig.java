@@ -2,11 +2,13 @@ package kr.gdu.shop2.config;
 
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
@@ -17,6 +19,8 @@ import kr.gdu.shop2.intercepter.BoardIntercepter;
 @EnableAspectJAutoProxy //AOP 관련 설정 
 //@EnableWebMvc  //기본 제공되는 web처리 기능 유지
 public class MvcConfig implements WebMvcConfigurer{
+	@Value("${board.upload.dir}")
+	private String BOARD_UPLOAD_DIR;
 	
 	//예외처리 객체 : 예외발생시 예외 처리해 주는 객체
 	@Bean
@@ -44,4 +48,11 @@ public class MvcConfig implements WebMvcConfigurer{
     public void configureViewResolvers(ViewResolverRegistry registry) {
         registry.jsp("/WEB-INF/views/", ".jsp");
     }
+	@Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // 브라우저에서 /board/** 로 시작하는 주소로 접근하면
+        // 실제 로컬의 BOARD_UPLOAD_DIR 폴더에서 파일을 찾도록 설정
+        registry.addResourceHandler("/board/**")
+                .addResourceLocations("file:///" + BOARD_UPLOAD_DIR);
+    }	
 }

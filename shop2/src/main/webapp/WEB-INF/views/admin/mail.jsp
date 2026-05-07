@@ -10,10 +10,6 @@
 </head>
 <body><h2>메일보내기</h2>
 <form:form modelAttribute="mail" name="mailform"  action="mail" enctype="multipart/form-data" >
-   본인구글ID : <form:input  path="googleid" class="form-control" />
-   <form:errors path="googleid" class="text-danger"/><br>   
-   본인구글비밀번호 : <form:password path="googlepw" class="form-control" />
-   <form:errors path="googlepw" class="text-danger"/>
 <table class="table">
  <tr><td>보내는사람</td><td>${loginUser.email}</td></tr>
  <tr><td>받는사람</td>

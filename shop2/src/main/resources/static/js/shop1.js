@@ -6,7 +6,7 @@ function sendFile(file) {
 	let data = new FormData(); //파일업로드를 위한 컨테이너 객체 생성
 	data.append("image",file); //file : 업로드되는 데이터 한개
 	$.ajax({
-		  url : "/shop1/ajax/uploadImage",
+		  url : "/ajax/uploadImage",
 		  type : "post",    //post 방식의 요청
 		  data : data,      //FormData 객체를 서버로 전달
 		  processData : false,  //문자열 전송아님. 파일업로드시 사용함

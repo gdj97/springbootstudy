@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>AI 챗봇</title>
-<link href="/shop1/css/chatbot.css" rel="stylesheet">
+<link href="/css/chatbot.css" rel="stylesheet">
 </head>
 <body>
 <div id='chatbotarea' class='text-center rounded' style='background-color:#1A6511'>
@@ -59,7 +59,7 @@
         	referrerPolicy: "no-referrer",   
 	    	body : "question="+gpt_question		     
 		}
-		fetch('/shop1/ajax/gptquestion',paramdata)  //ES6 이후에 추가된 함수. 서버와 비동기 통신 함수
+		fetch('/ajax/gptquestion',paramdata)  //ES6 이후에 추가된 함수. 서버와 비동기 통신 함수
 	   	.then(response=> response.text())
 	   	.then(gptdata=>{  //gptdata : gpt 전달해준 결과 값
 	   		let html="<div class='chat bot'><div class='icon'><i></i></div>"

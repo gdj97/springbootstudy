@@ -25,6 +25,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -47,6 +48,10 @@ import kr.gdu.shop2.service.UserService;
 public class AdminController {
 	@Autowired
 	private UserService service;
+	
+	@Value("${resources.dir}")  
+	private String RESOURCES_DIR;
+	
 	
 	@RequestMapping("list")
 	public ModelAndView list(HttpSession session) {
@@ -97,7 +102,7 @@ public class AdminController {
 		}
 		Properties prop = new Properties();
 		try {
-			String path = request.getServletContext().getRealPath("/") + "/WEB-INF/classes/mail.properties";
+			String path = RESOURCES_DIR + "mail.properties";
 			//fis : mail.properties 파일을 읽기 
 			FileInputStream fis = new FileInputStream(path);
 			prop.load(fis); //mail.properties 파일의 key=value 값으로 데이터 저장

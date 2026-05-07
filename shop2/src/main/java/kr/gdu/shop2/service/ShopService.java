@@ -23,6 +23,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +35,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ShopService {
 	@Value("${resources.dir}")   //application.properties 파일의 정보 가져오기
 	private String RESOURCES_DIR;  //resources.dir=D:/20251222/springboot/workspace/shop2/src/main/resources/
+	@Value("${board.upload.dir}")
+	private String BOARD_UPLOAD_DIR;
+	/*
+	 * Spring AI에서 제공되는 클래스 
+	 * OPENAI에게 요청하는 클래스
+	 * application.properties 파일의 spring.ai.openai.api-key 값을 api-key로 사용함
+	 * spring.ai.openai.api-key : 시스템 환경변수에 등록된 키값으로 설정함
+	 */
+    private ChatClient chatClient;  
+
+    //생성자를 통해 ChatClient 객체 주입
+    public ShopService(ChatClient.Builder chatClientBuilder) {
+        chatClient = chatClientBuilder.build();
+    }
 	
 	public String sidoSelect1(String si, String gu) {
 		BufferedReader fr = null;
@@ -182,8 +197,8 @@ public class ShopService {
 		return map;
 	}
 
-	public String summernoteImageUpload(MultipartFile multipartFile, HttpServletRequest request) {
-		File dir = new File(request.getServletContext().getRealPath("/") + "board/image");
+	public String summernoteImageUpload(MultipartFile multipartFile) {
+		File dir = new File(BOARD_UPLOAD_DIR + "image/");
 		if (!dir.exists()) dir.mkdirs();
 		String filesystemName = multipartFile.getOriginalFilename();
 		File file = new File(dir,filesystemName);
@@ -192,7 +207,7 @@ public class ShopService {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		return request.getContextPath() + "/board/image/" + filesystemName;	
+		return  "/board/image/" + filesystemName;	
 	}
 	public String goodeelogo() {
 		Document doc = null;
@@ -209,7 +224,9 @@ public class ShopService {
 		System.out.println(imgs1.get(0).toString() + imgs2.get(0).toString());
 		return imgs1.get(0).toString() + imgs2.get(0).toString();
 	}
-
+	
+	
+/*
 	public String getChatGPTResponse(String question) throws URISyntaxException,IOException,InterruptedException{
 //	    final String API_KEY = "OPEN AI API_KEY";
 		//github에 로드 하지 말것
@@ -231,7 +248,7 @@ public class ShopService {
                 put("content", "당신은 자바 전문가 입니다.");
          *     
          *  }}
-         */
+         * /
         requestBody.put("messages", new Object[] {  //요청 메세지
             new HashMap<String, String>() {{ //질문 내용
                 put("role", "user");
@@ -243,7 +260,7 @@ public class ShopService {
          * role :
          *    system : 페르소나(정체성) 설정. 대화의 규칙,맥락 구체화 시킬수 있는 메세지. 대화시작시 한번. 옵션. 생략 가능
          *    user  : 실제 질문. 필수 데이터
-         */
+         * /
         //자바의 객체를 JSON 형식의 문자열로 변환 할 수 있는 객체 생성
         ObjectMapper objectMapper = new ObjectMapper();
         //requestBody 객체를 json 형식의 문자열로 변경
@@ -275,4 +292,13 @@ public class ShopService {
             throw new RuntimeException("API 요청 실패: " + response.body());
         }
 	}
+*/
+	public String getChatGPTResponse(String question) { //기본 모델 : gpt-4o-mini
+	      return chatClient.prompt()   //쳇봇의 시작
+//	    	.system("당신은 자바 전문가 입니다")	 // 정체성설정
+	        .user(question)            //질문사항
+	        .call()                    //openai에 요청
+	        .content();                 //응답 메세지
+	    }
+	
 }

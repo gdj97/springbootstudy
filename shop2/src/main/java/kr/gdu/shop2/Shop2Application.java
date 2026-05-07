@@ -27,3 +27,11 @@ public class Shop2Application {  //SpringBoot의 시작 프로그램.
 	     TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul")); //지역 설정
 	 }
 }
+/*
+ *    2026-05-06
+ *    1. 게시판에 파일 업로드 시 resource 폴더로 업로드하기
+ *    2. summernote 이미지 업로드시 resource 폴더로 업로드하기
+ */
+
+
+

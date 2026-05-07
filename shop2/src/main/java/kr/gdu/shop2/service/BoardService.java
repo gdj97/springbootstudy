@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,14 +24,17 @@ public class BoardService {
 	BoardDao dao;
 	@Autowired
 	CommentDao commDao;
+	
+	@Value("${board.upload.dir}")
+	private String BOARD_UPLOAD_DIR;
+	
 
 	public void boardWrite(Board board, HttpServletRequest request) {
 		int maxnum = dao.maxNum();  //board 테이블의 최대 num 컬럼의 값을 리턴
 		board.setNum(maxnum+1);
 		board.setGrp(maxnum+1); //원글의 경우 grp 컬럼의 값은 num 컬럼의 값과 같음
 		if(board.getFile1() != null && !board.getFile1().isEmpty()) { //업로드된 파일이 존재.
-			String path = request.getServletContext().getRealPath("/") + "board/file/"; //업로드되는 폴더설정
-			uploadFileCreate(board.getFile1(),path);  //파일 업로드
+			uploadFileCreate(board.getFile1(),BOARD_UPLOAD_DIR + "file/");  //파일 업로드
 			board.setFileurl(board.getFile1().getOriginalFilename()); //파일이름 설정
 		}
 		dao.insert(board); //board 테이블에 게시글 추가.
@@ -77,8 +81,7 @@ public class BoardService {
 	public void boardUpdate(Board board, HttpServletRequest request) {
 		//첨부파일 업로드
 		if(board.getFile1() != null && !board.getFile1().isEmpty()) { //첨부파일이 수정된경우. 
-			String path = request.getServletContext().getRealPath("/") + "board/file/";
-			uploadFileCreate(board.getFile1(), path);  
+			uploadFileCreate(board.getFile1(), BOARD_UPLOAD_DIR+ "file/");  
 			//board.getFileurl() : 수정전 첨부파일명 
 			board.setFileurl(board.getFile1().getOriginalFilename()); //첨부된 파일이름 fileUrl 프로퍼티값 변경
 		}
