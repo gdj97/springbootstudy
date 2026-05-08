@@ -35,6 +35,7 @@
 			    "type":$("#type").val()  //검색종류
 	     },
 		 success : function(json) {
+			console.log(json)
 			 let total = json.total;  //전체 검색 건수
 			 let html = "";
 			 let num = (start-1) * $("#display").val() + 1;  //검색 순서

@@ -29,7 +29,7 @@ public class CartAspect {
 	 * 1. 로그인 필수
 	 * 2. 관리자로 로그인된 경우는 주문 불가
 	 */
-	@Before("execution(* controller.Cart*.check*(..)) && args(..,session)")
+	@Before("execution(* kr.gdu.shop2.controller.Cart*.check*(..)) && args(..,session)")
 	public void cartCheck(HttpSession session) throws Throwable {
 	   Cart cart =(Cart)session.getAttribute("CART"); //등록된 장바구니 객체
 	   if(cart == null || cart.getItemSetList().size() == 0) { //장바구니에 상품이 없는 경우

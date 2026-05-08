@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.validation.constraints.NotEmpty;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Getter;
@@ -13,10 +14,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class Mail {
-	@NotEmpty(message="구글 아이디를 입력하세요")
-	private String googleid;
-	@NotEmpty(message="구글 비밀번호를 입력하세요")
-	private String googlepw;
+	@NotEmpty(message="수신자를 입력하세요")
 	private String recipient;
 	@NotEmpty(message="제목을 입력하세요")
 	private String title;

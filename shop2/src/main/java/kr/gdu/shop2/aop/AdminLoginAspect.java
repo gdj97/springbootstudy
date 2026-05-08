@@ -17,7 +17,7 @@ import kr.gdu.shop2.exception.ShopException;
 @Component
 @Aspect
 public class AdminLoginAspect {
-	@Around("execution(* controller.AdminController.*(..))")
+	@Around("execution(* kr.gdu.shop2.controller.AdminController.*(..))")
 	public Object adminCheck(ProceedingJoinPoint joinPoint) throws Throwable {		
 		HttpSession session = null;
 		//RequestContextHolder : request,response 객체 전달

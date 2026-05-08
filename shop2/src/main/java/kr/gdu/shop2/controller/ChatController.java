@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("chat")
 public class ChatController {
+//	@Value("${naver.clientid}")
+	private String clientId = System.getenv("NAVER_CLIENTID"); //이클립스 다시 띄우기
+//	@Value("${naver.clientSecret}")
+	private String clientSecret = System.getenv("NAVER_CLIENT_SECRET");
+	
 	@RequestMapping("*")
 	public String getView() {
 		return null;
@@ -29,8 +35,6 @@ public class ChatController {
 	@PostMapping("naversearch")
 	@ResponseBody //view 없이 직접 데이터를 클라이언트로 전송. RestController 처럼 사용
 	public JSONObject naversearch(String data,Integer display, Integer start, String type) {
-		String clientId = "";
-		String clientSecret = "";
 		StringBuffer json = new StringBuffer();
 		/*
 		 * 100건의 데이터가 존재 : 한페이지에 10건

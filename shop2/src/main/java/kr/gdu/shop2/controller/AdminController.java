@@ -52,6 +52,11 @@ public class AdminController {
 	@Value("${resources.dir}")  
 	private String RESOURCES_DIR;
 	
+	@Value("${google.mail.id}") //application.properties 파일 값 저장. 
+	private String googleid;
+	@Value("${google.mail.pw}")
+	private String googlepw;
+	
 	
 	@RequestMapping("list")
 	public ModelAndView list(HttpSession session) {
@@ -79,8 +84,6 @@ public class AdminController {
 			         .append("<").append(u.getEmail()).append(">,");
 		}
 		mail.setRecipient(recipient.toString()); //수신자 정보
-		mail.setGoogleid(""); //본인의 구글 id
-		mail.setGooglepw(""); //본인의 앱비밀번호
 		model.addAttribute("mail",mail);
 		return "admin/mail";
 	}
@@ -106,7 +109,7 @@ public class AdminController {
 			//fis : mail.properties 파일을 읽기 
 			FileInputStream fis = new FileInputStream(path);
 			prop.load(fis); //mail.properties 파일의 key=value 값으로 데이터 저장
-			prop.put("mail.smtp.user", mail.getGoogleid()); //구글아이디로 메일 전송
+			prop.put("mail.smtp.user", googleid); //구글아이디로 메일 전송
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -122,23 +125,24 @@ public class AdminController {
 	}
 	private boolean mailSend(Mail mail, Properties prop) {
 		//Authenticator 객체 : 메일 인증 객체
-		MyAuthenticator auth = new MyAuthenticator(mail.getGoogleid(),mail.getGooglepw());
+		MyAuthenticator auth = new MyAuthenticator(googleid,googlepw);
 		//session : 구글에서 메일전송을 할 수 있는 연결 객체. 
 		Session session = Session.getInstance(prop,auth);
 		//session 을 이용하여 메일객체 생성
 		MimeMessage mailmsg = new MimeMessage(session);
 		try {
 			//보내는 사람 설정
-			mailmsg.setFrom(new InternetAddress(mail.getGoogleid() + "@gmail.com"));
+			mailmsg.setFrom(new InternetAddress(googleid + "@gmail.com"));
 			
 			List<InternetAddress> addrs = new ArrayList<InternetAddress>();
 			String[] emails = mail.getRecipient().split(",");
 			for(String email : emails) {
-				try {
-					addrs.add(new InternetAddress(new String(email.getBytes("utf-8"),"8859_1")));
-				} catch (UnsupportedEncodingException ue) {
-					ue.printStackTrace();
-				}
+//				try {
+//					addrs.add(new InternetAddress(new String(email.getBytes("utf-8"),"8859_1")));
+					addrs.add(new InternetAddress(email));
+//				} catch (UnsupportedEncodingException ue) {
+//					ue.printStackTrace();
+//				}
 			}
 			InternetAddress[] arr = new InternetAddress[emails.length];
 			for(int i=0;i<addrs.size();i++) {

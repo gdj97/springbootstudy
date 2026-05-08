@@ -18,7 +18,7 @@ public class LoginAspect {
 	 * pointcut : controller 패키지에 User로 시작하는 클래스의 메서드 중 idCheck 이름으로 시작하는 메서드 이면서
 	 *            매개변수목록이 String,HttpSession으로 끝나는 메서드 
 	 */
-	@Around("execution(* controller.User*.idCheck*(..)) && args(..,userid,session)")
+	@Around("execution(* kr.gdu.shop2.controller.User*.idCheck*(..)) && args(..,userid,session)")
 	public Object userIdCheck(ProceedingJoinPoint joinPoint,
 								String userid,HttpSession session) throws Throwable {
 	   User loginUser = (User)session.getAttribute("loginUser");	
@@ -36,7 +36,7 @@ public class LoginAspect {
 	 *                   메서드로 설정
 	 *advice : Around           
 	 */
-	@Around("execution(* controller.User*.loginCheck*(..)) && args(..,session)")
+	@Around("execution(* kr.gdu.shop2.controller.User*.loginCheck*(..)) && args(..,session)")
 	public Object loginCheck(ProceedingJoinPoint joinPoint,HttpSession session) throws Throwable {
 	   User loginUser = (User)session.getAttribute("loginUser");	
 	   if(loginUser == null || !(loginUser instanceof User)) { //로그아웃상태
