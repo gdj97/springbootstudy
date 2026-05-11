@@ -8,12 +8,14 @@ import kr.gdu.shop3.entity.Item;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class ItemDto {
 	private int id;
 	//null 또는 공백인 경우 오류 검증

@@ -13,7 +13,7 @@
 </head>
 <body>
 <h2>회원 가입</h2>
-<form:form modelAttribute="user" method="post" action="join">
+<form:form modelAttribute="userDto" method="post" action="join">
  <spring:hasBindErrors name="user">
     <font color="red">
     <%-- errors.globalErrors : BindingResule.reject(코드) 등록한 정보들 --%>

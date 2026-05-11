@@ -21,7 +21,7 @@
  	html 태그로 변환
  	<form action="create" enctype="multipart/form-data" method="post">
  --%>
-<form:form  modelAttribute="item" action="create" enctype="multipart/form-data">
+<form:form  modelAttribute="itemDto" action="create" enctype="multipart/form-data">
 <h2>상품등록</h2>
 <table class="table">
 <tr><td>상품명</td>

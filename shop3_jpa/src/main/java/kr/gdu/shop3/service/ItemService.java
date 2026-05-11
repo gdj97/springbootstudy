@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +32,9 @@ public class ItemService {
 	private SaleRepository saleDao;
 	@Autowired
 	private SaleItemRepository saleItemDao;
+	
+	@Value("${resources.dir}")
+	private String RESOURCE_DIR;
 
 	public List<ItemDto> itemList() {
 		//findAll : item 테이블의 모든 정보 조회. List<Item> 리턴
@@ -47,7 +51,7 @@ public class ItemService {
 	public void itemCreate(ItemDto item, HttpServletRequest request) {
 		//업로드할 파일이 존재하면 파일을 저장
 		if(item.getPicture() != null && !item.getPicture().isEmpty()) { //업로드된 파일 존재
-		  String path = request.getServletContext().getRealPath("/")+"img/"; //업로드될 폴더
+		  String path = RESOURCE_DIR+"static/img/"; //업로드될 폴더
 		  uploadFileCreate(item.getPicture(),path);
 		  item.setPictureUrl(item.getPicture().getOriginalFilename());
 		}
@@ -59,7 +63,7 @@ public class ItemService {
 	public void itemUpdate(ItemDto item, HttpServletRequest request) {
 		//업로드할 파일이 존재하면 파일을 저장
 		if(item.getPicture() != null && !item.getPicture().isEmpty()) { //업로드된 파일 존재
-		  String path = request.getServletContext().getRealPath("/")+"img/"; //업로드될 폴더
+		  String path = RESOURCE_DIR+"static/img/"; //업로드될 폴더
 		  uploadFileCreate(item.getPicture(),path);
 		  item.setPictureUrl(item.getPicture().getOriginalFilename());
 		}

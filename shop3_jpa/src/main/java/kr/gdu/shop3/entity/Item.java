@@ -21,7 +21,7 @@ public class Item {
 	private String name;
 	private int price;
 	private String description;
-	private String pictureUrl;
+	private String pictureUrl;  //컬럼 : picture_url 컬럼명으로 변경
 	@Transient   //컬럼이 아님. 컬럼과 상관없는 프로퍼티 
 	private MultipartFile picture;
 	public Item(ItemDto item) {

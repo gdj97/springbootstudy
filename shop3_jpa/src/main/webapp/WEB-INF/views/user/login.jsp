@@ -7,9 +7,8 @@
 <title>로그인화면</title>
 </head><body>
 <h2>사용자 로그인</h2>
-<form:form modelAttribute="user" method="post" action="login" 
-           name="loginform">
-  <spring:hasBindErrors name="user">
+<form:form modelAttribute="userDto" method="post" action="login" name="loginform">
+  <spring:hasBindErrors name="userDto">
     <font color="red"><c:forEach items="${errors.globalErrors}" var="error">
          <spring:message code="${error.code}" />
       </c:forEach></font></spring:hasBindErrors>

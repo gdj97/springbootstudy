@@ -40,6 +40,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,6 +64,14 @@ public class UserController {
 	@Autowired
 	private ItemService itemService;
 	
+	private String clientId = System.getenv("NAVER_CLIENTID");
+	private String clientSecret = System.getenv("NAVER_CLIENT_SECRET");
+	
+//	@ModelAttribute
+//	public void user(Model model) {
+//		model.addAttribute("user",new UserDto());
+//	}
+	
 	//http://localhost:8080/shop1/user/join => /WEB-INF/view/user/join.jsp 
 	@GetMapping("*") //Get 방식의 모든 요청
 	public ModelAndView form() {
@@ -79,11 +88,11 @@ public class UserController {
 	@GetMapping("login") 
 	public ModelAndView loginForm(HttpSession session) {
 		ModelAndView mav = new ModelAndView();
-		String clientId="rGh0ITfXNHwLoTbWBKSN";
 		String redirectURL = null;
 		try {
 			//네이버에 Callback URL 전달
-			redirectURL = URLEncoder.encode("http://localhost:8080/shop1/user/naverlogin","UTF-8");
+//			redirectURL = URLEncoder.encode("http://localhost:8080/shop1/user/naverlogin","UTF-8");
+			redirectURL = URLEncoder.encode("http://localhost:8083/user/naverlogin","UTF-8");
 		} catch(UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -109,8 +118,6 @@ public class UserController {
 	@RequestMapping("naverlogin")
 	public String naverlogin(String code, String state, HttpSession session) {
 		System.out.println("2.session.id="+session.getId());
-		String clientId = ""; //네이버 개발자센터의 Client ID값
-		String clientSecret = "";       //네이버 개발자센터의 Client Secret값
 		String redirectURI=null;
 		try {
 			redirectURI = URLEncoder.encode("YOUR_CALLBACK_URL", "UTF-8");
@@ -302,7 +309,7 @@ public class UserController {
 	public ModelAndView idCheckUser(String userid,HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		UserDto user = service.getUser(userid);
-		mav.addObject("user",user);
+		mav.addObject("userDto",user);
 		return mav;
 	}
 	@RequestMapping("logout")

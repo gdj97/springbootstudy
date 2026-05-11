@@ -9,7 +9,7 @@
 <meta charset="UTF-8">
 <title>게시글 작성</title></head>
 <body>
-<form:form modelAttribute="board" action="write" enctype="multipart/form-data" name="f">
+<form:form modelAttribute="boardDto" action="write" enctype="multipart/form-data" name="f">
 <input type="hidden" name="boardid" value="${param.boardid}" >           
 <table class="table">
   <tr><th>글쓴이</th><td><form:input path="writer" class="form-control"/>

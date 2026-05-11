@@ -12,8 +12,8 @@
 </head>
 <body>
 <h2>사용자 수정</h2>
-<form:form modelAttribute="user" method="post" action="update">
- <spring:hasBindErrors name="user">
+<form:form modelAttribute="userDto" method="post" action="update">
+ <spring:hasBindErrors name="userDto">
     <font color="red">
       <c:forEach items="${errors.globalErrors}" var="error">
         <spring:message code="${error.code}" /><br>

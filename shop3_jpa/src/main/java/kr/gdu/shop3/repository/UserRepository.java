@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import kr.gdu.shop3.entity.User;
 
 public interface UserRepository extends JpaRepository<User, String>{
-	@Modifying
+	@Modifying   //트랜젝션 처리 필요. Service에서 주로 담당함
 	@Query("update User u set u.password=:chgpass where u.userid = :userid")
 	public void chgPass(@Param("userid") String userid, @Param("chgpass") String chgpass);
 	

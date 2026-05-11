@@ -271,9 +271,10 @@ public class BoardController {
 	 */
 	@PostMapping("commdel")
 	public String commdel(CommentDto comm) {
+		//dbComm : 삭제 대상의 댓글 레코드
 		CommentDto dbComm = service.getComment(comm.getNum(),comm.getSeq());
-		if(comm.getPass().equals(dbComm.getPass())) {
-			service.commendDel(comm.getNum(),comm.getSeq());
+		if(comm.getPass().equals(dbComm.getPass())) { //비밀번호 검증
+			service.commentDel(comm.getNum(),comm.getSeq());
 			return "redirect:detail?num="+comm.getNum() + "#comment";
 		} else {
 			throw new ShopException

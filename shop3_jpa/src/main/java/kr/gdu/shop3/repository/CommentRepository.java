@@ -18,6 +18,11 @@ public interface CommentRepository extends JpaRepository<Comment,CommentId>{
 	@Query("select COALESCE(max(c.seq),0) from Comment c where c.num = :num")
 	public int maxseq(@Param("num") int num) ;
 
-	public List<CommentDto> findByNum(Integer num);
+	/*
+	 * findByXxx 이름의 함수 : xxx 컬럼의 이름을 가지고 db에서 조회.
+	 * findByNum(num) : Comment 테이블에서 num 조건으로 데이터 조회. List 객체로 리턴하도록
+	 *                  JPA에서 sql 구문을 생성하여 실행해줌
+	 */
+	public List<Comment> findByNum(Integer num);
 	
 }

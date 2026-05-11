@@ -5,12 +5,14 @@ import java.util.Date;
 import jakarta.validation.constraints.NotEmpty;
 import kr.gdu.shop3.entity.Comment;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Setter
 @Getter
 @ToString
+@NoArgsConstructor
 public class CommentDto {
 	private int num;
 	private int seq;

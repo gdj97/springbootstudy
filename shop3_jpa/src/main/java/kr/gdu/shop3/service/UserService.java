@@ -19,8 +19,10 @@ import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import kr.gdu.shop3.dto.UserDto;
@@ -32,12 +34,25 @@ public class UserService {
 	@Autowired
 	private UserRepository dao;
 
+	@Value("${resources.dir}")
+	private String RESOURCES_DIR;
+
+	@Value("${google.mail.id}")
+	private String googleid;
+	
+	@Value("${google.mail.pw}")
+	private String googlepw;
+
 	public void userInsert(UserDto user) {
 		dao.save(new User(user));
 	}
 
 	public UserDto getUser(String userid) {
-		return new UserDto(dao.findById(userid).get());
+		User u = dao.findById(userid).orElseGet(()->null);
+		if (u != null)
+  		    return new UserDto(dao.findById(userid).get());
+		else
+			return null;
 	}
 
 	public void userUpdate(UserDto user) {
@@ -48,12 +63,17 @@ public class UserService {
 		dao.deleteById(userid);
 	}
 
+	@Transactional   //데이터베이스 변경시 처리 필수
 	public void userChgPass(String userid, String chgpass) {
 		dao.chgPass(userid,chgpass);
 	}
 	//아이디 찾기, 비밀번호찾기
 	public String getSearch(UserDto user, String url) {
-		return dao.search(user,url);
+		if (url.equals("id")) {
+			return  dao.searchByUserid(user.getEmail(),user.getPhoneno());
+		} else {
+		    return dao.searchByPassword(user.getUserid(),user.getEmail(),user.getPhoneno());
+		}
 	}
 
 	public List<UserDto> userList() {
@@ -64,13 +84,17 @@ public class UserService {
 		//findByUseridIn : List로 전달된 데이터를 이용하여 userid들을 in 연산자로 조회
 		return dao.findByUseridIn(Arrays.asList(idchks)).stream().map(user->new UserDto(user)).toList();
 	}
+	/* 
+	 * 메일전송시 필요한 환경변수
+	 * 1. 구글 ID : application.properties 파일에서 값 조회. 멤버필드:googleid 선언한 상태
+	 * 2. 구글 PW : application.properties 파일에서 값 조회. 멤버필드:googlepw 선언한 상태
+	 * 3. mail.properties 파일 : 멤버필드 : RESOURCES_DIR 선언한 상태
+	 */
 	
 	public boolean mailSend(UserDto user,String initpw,HttpServletRequest request) {
-		String googleid = "구글아이디";
-		String googlepw = "앱비밀번호";
 		Properties prop = new Properties();
 		MyAuthenticator auth = new MyAuthenticator(googleid,googlepw);
-		String path = request.getServletContext().getRealPath("/") + "/WEB-INF/classes/mail.properties";
+		String path =RESOURCES_DIR + "mail.properties";
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(path);
@@ -94,7 +118,7 @@ public class UserService {
 			//message type : "text/html; charset=utf-8" => 이메일에서 html 태그 인식
 			//message type : "text/plain; charset=utf-8" => 이메일에서 html 태그 인식 안함
 			message.setContent("<h1 style='color:blue;'>비밀번호 초기화 :" + initpw + "</h1>",
-				               "text/plain; charset=utf-8");  
+				               "text/html; charset=utf-8");  
 			multipart.addBodyPart(message);
 			mailmsg.setContent(multipart);
 			Transport.send(mailmsg);

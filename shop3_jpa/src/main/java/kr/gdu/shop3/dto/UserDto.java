@@ -12,12 +12,14 @@ import kr.gdu.shop3.entity.User;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Setter
 @Getter
 @ToString
+@NoArgsConstructor
 public class UserDto {
 	//@Size : 입력한 값의 길이가 3자이상 10자이하만 가능
 	@Size(min=3,max=10,message="아이디는 3자이상 10자이하로 입력하세요")
@@ -38,7 +40,14 @@ public class UserDto {
 	@DateTimeFormat(pattern="yyyy-MM-dd") //날짜의 형식 지정
 	private Date birthday;
 	public UserDto(User user) {
-		// TODO Auto-generated constructor stub
+		this.userid = user.getUserid();
+		this.password = user.getPassword();
+		this.username = user.getUsername();
+		this.phoneno = user.getPhoneno();
+		this.postcode = user.getPostcode();
+		this.address = user.getAddress();
+		this.email = user.getEmail();
+		this.birthday = user.getBirthday();
 	}
 
 }

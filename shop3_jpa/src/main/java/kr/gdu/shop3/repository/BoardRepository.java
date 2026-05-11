@@ -35,12 +35,12 @@ public interface BoardRepository extends JpaRepository<Board,Integer>,JpaSpecifi
 	@Query("SELECT b.writer AS writer, COUNT(b) AS cnt "
 			+ " FROM Board b WHERE b.boardid = :boardid "
 			+ " GROUP BY b.writer ORDER BY cnt DESC")
-	public List<Map<String, Object>> graph1(String id);
+	public List<Map<String, Object>> graph1(@Param("boardid") String id);
 	
 	//nativeQuery = true : JPQL이 아니고 원래 데이터베이스 sql로 사용
 	@Query(value = "SELECT DATE_FORMAT(regdate, '%Y-%m-%d') AS day, COUNT(*) AS cnt "
             + "FROM board WHERE boardid = :boardid "
             + "GROUP BY DATE_FORMAT(regdate, '%Y-%m-%d') "
             + "ORDER BY day DESC LIMIT 7", nativeQuery = true)	
-	public List<Map<String, Object>> graph2(String id);
+	public List<Map<String, Object>> graph2(@Param("boardid") String id);
 }

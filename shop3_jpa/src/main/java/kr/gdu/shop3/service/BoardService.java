@@ -152,16 +152,19 @@ public class BoardService {
 		commDao.save(new Comment(comm));
 	}
 	public List<CommentDto> commentList(Integer num) {
-		return commDao.findByNum(num);
+		return commDao.findByNum(num).stream().map(comm->new CommentDto(comm)).toList();
 	}
 
 	public CommentDto getComment(int num, int seq) {
+		//CommentId : Comment 테이블의 키값 클래스
 		CommentId id = new CommentId(num,seq);
+		//findById(키값) : 키값으로 레코드 한개만 리턴
 		return new CommentDto(commDao.findById(id).orElseGet(()->null));
 	}
 
-	public void commendDel(int num, int seq) {
+	public void commentDel(int num, int seq) {
 		CommentId id = new CommentId(num,seq);
+		//deleteById : 키값에 해당하는 레코드 삭제
 		commDao.deleteById(id);
 	}	
 	public Map<String, Integer> graph1(String id) {  //게시판 종류별, 글작성자별 등록 건수

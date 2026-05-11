@@ -7,10 +7,13 @@ import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.gdu.shop3.dto.ItemDto;
@@ -19,8 +22,19 @@ import kr.gdu.shop3.service.ItemService;
 @Controller  //@Component + Controller기능
 @RequestMapping("item")  //http://localhost:8080/shop1/item/**
 public class ItemController {
+	private final BoardController boardController;
 	@Autowired
 	private ItemService service;
+
+	ItemController(BoardController boardController) {
+		this.boardController = boardController;
+	}
+	
+	//view modelAttribute 에서 필요한 객체를 리턴
+	@ModelAttribute
+	public void getItem(Model model) {
+		model.addAttribute("item",new ItemDto());
+	}
 	
 	//http://localhost:8080/shop1/item/list
 	@RequestMapping("list") //get,post 방식 상관없이 호출
