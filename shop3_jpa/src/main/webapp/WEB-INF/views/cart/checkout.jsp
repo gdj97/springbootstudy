@@ -24,7 +24,7 @@
   <tr><td colspan="4" align="right">총 구입 금액 : 
      <fmt:formatNumber value="${sessionScope.CART.total}" type="currency" /> 원</td></tr>
   <tr><td colspan="4" class="text-center">
-     <a href="javascript:kakaopay()" class="btn btn-primary">확정하기</a>&nbsp;
+     <a href="end" class="btn btn-primary">확정하기</a>&nbsp;
      <a href="../item/list" class="btn btn-success">상품 목록</a>&nbsp;
   </td></tr></table>
 <%-- 결제하기 모듈 : 개발자 문서

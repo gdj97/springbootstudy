@@ -25,7 +25,11 @@ public class SaleItemDto {
 		this.quantity = itemSet.getQuantity();  
 	}
 
-	public SaleItemDto(SaleItem si) {
-		// TODO Auto-generated constructor stub
+	public SaleItemDto(SaleItem saleItem) {
+		this.saleid = saleItem.getSaleid();
+		this.seq = saleItem.getSeq();
+		this.itemid = saleItem.getItemid();
+		this.quantity = saleItem.getQuantity();
+		this.item = new ItemDto(saleItem.getItem());
 	}
 }
