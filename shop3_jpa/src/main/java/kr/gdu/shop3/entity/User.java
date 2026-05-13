@@ -37,5 +37,6 @@ public class User {
 		this.address = user.getAddress();
 		this.email = user.getEmail();
 		this.birthday = user.getBirthday();
+		this.channel = user.getChannel();
 	}
 }
