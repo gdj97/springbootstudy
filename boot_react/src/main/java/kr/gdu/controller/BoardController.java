@@ -1,6 +1,8 @@
 package kr.gdu.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +77,7 @@ public class BoardController {
 		 *    변경불가 객체임. 
 		 *    최대 10개만 지원
 		*/  
+		System.out.println(start + "," + end + "," + maxpage);
 		return Map.of(
 				"boardid",boardid,
 				"boardName",boardName,
@@ -122,5 +125,83 @@ public class BoardController {
 		return	Map.of("board",board,
 				"boardName",boardName);
 	}	
-	
+	@GetMapping("boardUpdateForm")
+	public Map<String, Object> boardUpdateForm(int num)  {
+		BoardEntity board = service.getBoard(num);
+		String boardName = null;
+		if(board.getBoardid() == null || board.getBoardid().equals("1"))
+			boardName = "공지사항";
+		else if(board.getBoardid().equals("2"))
+			boardName = "자유게시판";
+		else if(board.getBoardid().equals("3"))
+			boardName = "QNA";
+		
+		return	Map.of("board",board,
+				"boardName",boardName);
+	}
+	@PostMapping("boardUpdatePro")
+	public Map<String,Object> boardUpdatePro(
+	@RequestParam(value="file2", required = false) MultipartFile multipartFile, 
+	                BoardDto boardDto) throws IllegalStateException, IOException {
+		//비밀번호 검증
+	    BoardEntity dbBoard = service.getBoard(boardDto.getNum());
+		Map<String,Object> map = new HashMap<>(); //react 전송할 결과 데이터 => react는 json 형식으로 전달됨
+		//boardDto.getPass() : 입력된 비밀번호
+		//dbBoard.getPass() : db에 저장된 비밀번호
+		if(!boardDto.getPass().equals(dbBoard.getPass())) { //비밀번호 오류
+			map.put("msg", "비밀번호 오류");
+			map.put("code", 100);
+			return map;
+		}
+		String path =UPLOAD_PATH+"img/board/";
+		File dir = new File(path);
+		/*
+		 * mkdirs()  : 폴더의 깊이가 여러개인 경우 생성. 한개인 경우도 사용 가능
+		 * mkdir() : 폴더의 깊이가 한개인 경우
+		 */
+		if(!dir.exists()) dir.mkdirs();  //폴더가 없으면 폴더 생성		
+		String filename="";
+		if (multipartFile != null && !multipartFile.isEmpty()) { //첨부파일 업로드 상태
+			File file = new File(path, multipartFile.getOriginalFilename());
+			filename=multipartFile.getOriginalFilename();
+			multipartFile.transferTo(file);	//업로드 실행
+			boardDto.setFile1(filename); //수정전 파일이름을 업로드된 파일의 이름 변경
+		} else {
+			boardDto.setFile1(dbBoard.getFile1()); //수정전 파일이름 
+		}
+		try {
+		    boardDto.setRegdate(dbBoard.getRegdate()); //게시물 생성 일자 유지.
+		    boardDto.setReadcnt(dbBoard.getReadcnt());
+			service.boardUpdate(new BoardEntity(boardDto));  //save(BoardEntity)=>모든 컬럼이 변경됨. 
+			map.put("msg", "게시글 수정완료");
+			map.put("code", 0);
+		} catch (Exception e) {
+			map.put("msg", "게시글 수정에 실패 했습니다");
+			map.put("code", 200);
+			e.printStackTrace();
+		}
+		return map;  
+	}
+	@PostMapping("boardDeletePro")
+	public Map<String,Object> boardDeletePro(
+	@RequestParam("num") Integer num, @RequestParam("pass") String pass) {
+	    BoardEntity dbBoard = service.getBoard(num);
+		Map<String,Object> map = new HashMap<>();
+		map.put("boardid", dbBoard.getBoardid());
+		if(!pass.equals(dbBoard.getPass())) {
+			map.put("msg", "비밀번호 오류");
+			map.put("code", 100);
+			return map;
+		}
+		try {
+			service.boardDelete(num);
+			map.put("msg", "게시글 삭제완료");
+			map.put("code", 0);
+		} catch (Exception e) {
+			map.put("msg", "게시글 삭제에 실패 했습니다");
+			map.put("code", 200);
+			e.printStackTrace();
+		}
+		return map;
+	}
 }

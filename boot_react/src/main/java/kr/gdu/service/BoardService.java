@@ -42,4 +42,11 @@ public class BoardService {
 		repository.addReadCnt(num);
 	}
 
+	public void boardUpdate(BoardEntity boardEntity) {
+		 repository.save(boardEntity);
+    }
+
+	public void boardDelete(Integer num) {
+		repository.deleteById(num);		
+	}
 }
