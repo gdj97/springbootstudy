@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.gdu.dto.BoardDto;
+import kr.gdu.dto.CommentDto;
 import kr.gdu.entity.BoardEntity;
+import kr.gdu.entity.CommentEntity;
 import kr.gdu.service.BoardService;
 /*
  * @CrossOrigin : CORS(Cross-Origin Resource Sharing) 설정
@@ -122,8 +126,11 @@ public class BoardController {
 		else if(board.getBoardid().equals("3"))
 			boardName = "QNA";
 		
+		List<CommentEntity> commlist = service.commentList(num); //num:게시물번호. 게시물번호에 해당하는 댓글목록 조회
+		
 		return	Map.of("board",board,
-				"boardName",boardName);
+				"boardName",boardName,
+				"clist",commlist);
 	}	
 	@GetMapping("boardUpdateForm")
 	public Map<String, Object> boardUpdateForm(int num)  {
@@ -204,4 +211,31 @@ public class BoardController {
 		}
 		return map;
 	}
+	@PostMapping("CommentPro")
+	public Map<String,Object> comment(CommentDto comm) {
+		Map<String,Object> map = new HashMap<>();
+		int seq = service.commmaxseq(comm.getNum()); //seq의 최대값
+		comm.setSeq(++seq);
+		service.commInsert(new CommentEntity(comm));  //댓글을 db에 등록
+		map.put("msg", "댓글 등록완료");
+		map.put("code", 0);
+		return map;		
+	}
+	@PostMapping("CommentDelete")
+	public Map<String,Object> commdel(CommentDto comm) {
+		// num,seq,pass 파라미터값이 저장됨
+		Map<String,Object> map = new HashMap<>();
+		CommentEntity dbComm = service.getComment(comm.getNum(),comm.getSeq()); //삭제 대상 댓글 레코드 조회
+		//비밀번호 검증
+		if(comm.getPass().equals(dbComm.getPass())) {   //일치
+			service.commentDel(comm.getNum(),comm.getSeq());  //삭제 대상 레코드 삭제
+			map.put("msg", "댓글 삭제완료");
+			map.put("code", 0);
+			return map;
+		} else {   //비밀번호 불일치
+			map.put("msg", "비밀번호 오류");
+			map.put("code", 100);
+			return map;
+		}
+	}	
 }

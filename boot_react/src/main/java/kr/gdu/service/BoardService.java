@@ -1,6 +1,8 @@
 package kr.gdu.service;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,12 +12,17 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import kr.gdu.entity.BoardEntity;
+import kr.gdu.entity.CommentEntity;
+import kr.gdu.entity.CommentId;
 import kr.gdu.repository.BoardRepository;
+import kr.gdu.repository.CommentRepository;
 
 @Service
 public class BoardService {
 	@Autowired
 	BoardRepository repository;
+	@Autowired
+	CommentRepository commRepository;
 
 	public int boardCount(String boardid) {
 		//where 조건문 
@@ -49,4 +56,28 @@ public class BoardService {
 	public void boardDelete(Integer num) {
 		repository.deleteById(num);		
 	}
+
+	public int commmaxseq(int num) {
+		return commRepository.maxseq(num);
+	}
+
+	public CommentEntity commInsert(CommentEntity commentEntity) {
+		return commRepository.save(commentEntity);
+	}
+
+	public List<CommentEntity> commentList(int num) {
+		return commRepository.findByNum(num);
+	}
+	
+	public CommentEntity getComment(int num, int seq) {
+		CommentId id = new CommentId(num,seq);
+		//findById(키값) :  key해당하는 엔티티를 객체 한개 리턴
+		return commRepository.findById(id).orElseGet(()->null);
+	}
+
+	public void commentDel(int num, int seq) {
+		CommentId id = new CommentId(num,seq);
+		commRepository.deleteById(id);
+	}	
+
 }
