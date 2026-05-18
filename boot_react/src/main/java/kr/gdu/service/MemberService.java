@@ -14,4 +14,8 @@ public class MemberService {
 	public void memberInsert(MemberEntity memberEntity) {
 		repository.save(memberEntity);
 	}
+
+	public MemberEntity getMember(String id) {
+		return repository.findById(id).orElse(null);
+	}
 }

@@ -11,6 +11,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfig implements WebMvcConfigurer{
 	@Value("${board.upload.dir}")
 	private String BOARD_UPLOAD_DIR;
+	@Value("${member.upload.dir}")
+	private String MEMBER_UPLOAD_DIR;
 	
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -18,5 +20,8 @@ public class MvcConfig implements WebMvcConfigurer{
         // 실제 로컬의 BOARD_UPLOAD_DIR 폴더에서 파일을 찾도록 설정
         registry.addResourceHandler("/img/board/**")
                 .addResourceLocations("file:///" + BOARD_UPLOAD_DIR+"/img/board/");
+        
+        registry.addResourceHandler("/member/picture/**")
+        		.addResourceLocations("file:///" + MEMBER_UPLOAD_DIR+"/member/picture/");
     }	
 }
